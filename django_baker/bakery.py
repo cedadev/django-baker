@@ -26,6 +26,8 @@ class Baker(object):
             model_names = {model.__name__: self.get_field_names_for_model(model) for model in models}
             self.create_directories(app)
             self.create_init_files(app, model_names.keys(), models)
+            self.create_templatetags_files(app)
+            
             self.remove_empty_startapp_files(app)
             for file_name in ["forms", "admin"]:
                 file_path = "%s/%s.py" % (app.path, file_name)
@@ -49,11 +51,19 @@ class Baker(object):
         """
             If not already there, adds a directory for views, urls and templates.
         """
-        for folder_name in ["views", "urls", "templates/%s" % app.label]:
+        for folder_name in ["views", "urls", "templates/%s" % app.label, "templatetags"]:
             directory_path = "%s/%s" % (app.path, folder_name)
             if not os.path.exists(directory_path):
                 os.makedirs(directory_path)
 
+    def create_templatetags_files(self, app):
+        """
+            Create templatestags files.
+        """
+        file_path = "%s/templatetags/%s_filters.py" % (app.path, app.label)
+        template_path = "django_baker/app_filters"
+        self.create_file_from_template(file_path, template_path, {})
+                
     def create_init_files(self, app, model_names, models):
         """
             If not already there, creates a new init file in views and urls directory.  Init file imports from all
