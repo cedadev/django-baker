@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from ..views import ({{ model_name }}ListView, {{ model_name }}CreateView, {{ model_name }}DetailView,
+from ..views.{{ model_name_slug }}_views import ({{ model_name }}ListView, {{ model_name }}CreateView, {{ model_name }}DetailView,
                      {{ model_name }}UpdateView, {{ model_name }}DeleteView)
 from django.contrib.auth.decorators import login_required
 
@@ -31,15 +31,15 @@ urlpatterns = [
         login_required({{ model_name }}CreateView.as_view()),
         name="{{ model_name_slug }}_create"),
 
-    url(r'^(?P<pk>\d+)/update/$',
+    url(r'^(?P<pk>.+)/update/$',
         login_required({{ model_name }}UpdateView.as_view()),
         name="{{ model_name_slug }}_update"),
 
-    url(r'^(?P<pk>\d+)/delete/$',
+    url(r'^(?P<pk>.+)/delete/$',
         login_required({{ model_name }}DeleteView.as_view()),
         name="{{ model_name_slug }}_delete"),
 
-    url(r'^(?P<pk>\d+)/$',
+    url(r'^(?P<pk>.+)/$',
         {{ model_name }}DetailView.as_view(),
         name="{{ model_name_slug }}_detail"),
 
